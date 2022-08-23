@@ -1,12 +1,12 @@
 FROM python:3.9-slim
 
-COPY ./app /app/src
-COPY ./requirements.txt /app
+COPY ./app /src/app
+COPY ./requirements.txt /src
 
-WORKDIR /app
+WORKDIR /src
 
 RUN pip3 install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["uvicorn", "src.main:app", "--host=0.0.0.0", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host=0.0.0.0", "--reload"]
