@@ -1,14 +1,20 @@
-from typing import Union
 from fastapi import FastAPI
+from app.config import Settings
+from app.models import PayloadModel
+from app.controller import fetch_data_from_s3
 
 app = FastAPI()
+settings = Settings()
 
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"status": "Dockerization successful!"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.post("/test-route")
+def read_item(payload: PayloadModel):
+    S3_ACCESS_KEY = settings.S3_ACCESS_KEY
+    S3_SECRET_ACCESS_KEY = settings.S3_SECRET_ACCESS_KEY
+    response = fetch_data_from_s3(payload, S3_ACCESS_KEY, S3_SECRET_ACCESS_KEY)
+    return response
